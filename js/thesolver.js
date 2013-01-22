@@ -199,7 +199,6 @@
 			}
 			return string;
 		}
-
 	};
 	/**
 	 * Date, time, and length (since length is a measure of time) related functions
@@ -266,11 +265,67 @@
 		 * returns the string with those moved to the end (after adding a ", ").  If there is no match, it just
 		 * returns the string it was given.
 		 *
-		 * @param title The title we want to sort better
+		 * By default it also removes single and double quotes from titles for sorting (since they often can be at the
+		 * beginning of a title).
+		 *
+		 * @param {String} title The title we want to sort better
+		 * @param {Boolean} [rem_quotes=true] Remove single and double quotes from the title for sorting?
 		 * @return {String} The title with any required changes
 		 */
-		sort_title:function (title) {
+		sort_title:function (title,rem_quotes) {
+			if (undefined === rem_quotes) {
+				rem_quotes = true;
+			}
+			if (rem_quotes) {
+				title = title.replace(/["']/g,'');
+			}
 			return title.replace(/^(The|A|An)\s+(.*)$/, '$2' + ', ' + '$1');
+		},
+				/**
+				 * Takes a number of bytes and returns it in GB, MB, KB, or bytes (rounded to precision decimal places)
+				 *
+				 * @param {Number} orig_size The size of the file in bytes
+				 * @param {Number} [precision=1] The number of decimal places we want
+				 * @return {String} The size in human readable verbiage
+				 */
+				size_in_human: function(orig_size,precision) {
+					if (undefined === precision) {
+						precision = 1;
+					}
+					if (orig_size > 1024*1024*1024) {
+						return((orig_size/(1024*1024*1024)).toFixed(precision) + 'GB');
+					} else if (orig_size > 1024*1024) {
+						return((orig_size/(1024*1024)).toFixed(precision) + 'MB');
+					} else if (orig_size > 1024) {
+						return((orig_size/1024).toFixed(precision) + 'KB');
+					} else {
+						return(orig_size + '');
+					}
+				}
+	};
+
+	/**
+	 * Regular expression related functions
+	 *
+	 * @namespace $thesolver
+	 * @class regex
+	 */
+	$thesolver.regex = {
+		/**
+		 * Validates a regular expression string so it can be used safely.
+		 *
+		 * @param {String} regex_string The string we want to validate
+		 * @return {RegExp|Boolean} A usable regular expression object if regex_string is valid, false if not
+		 */
+		valid:function (regex_string) {
+			var mystring = '';
+			try {
+				var result = new RegExp(regex_string);
+			}
+			catch (error) {
+				result = false;
+			}
+			return(result);
 		}
 	};
 
