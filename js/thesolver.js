@@ -1,3 +1,4 @@
+/*gobal window: false, jQuery: false */
 /**
  * Standard cross-client helpful functions
  *
@@ -32,7 +33,7 @@
 		 * Creates <a> elements with encoded text
 		 *
 		 * @method hyperlink
-		 * @param {String} href The href we will point to
+		 * @param {String} href The href we will point to (it will be encodeURI'd by this function)
 		 * @param {String} text The text of the link
 		 * @param {String} [target=_blank] (optional) The target page
 		 * @param {String|Boolean} [title=text] (optional) The title on the link (defaults to an encoded version of the text).
@@ -74,7 +75,7 @@
 					attrs = attrs + ' ' + attr + '="' + value + '"';
 				});
 			}
-			return('<a href="' + href + '" target="' + target + '"' + title +
+			return('<a href="' + encodeURI(href) + '" target="' + target + '"' + title +
 					aclass + attrs + '>' + text + '</a>');
 		},
 
@@ -273,36 +274,43 @@
 		 * @param {Boolean} [uc=true] Upper case the string
 		 * @return {String} The title with any required changes
 		 */
-		sort_title:function (title,rem_quotes) {
+		sort_title   :function (title, rem_quotes, uc) {
 			if (undefined === rem_quotes) {
 				rem_quotes = true;
 			}
-			if (rem_quotes) {
-				title = title.replace(/["']/g,'');
+			if (undefined === uc) {
+				uc = true;
 			}
-			return title.replace(/^(The|A|An)\s+(.*)$/i, '$2' + ', ' + '$1').toUpperCase();
+			if (rem_quotes) {
+				title = title.replace(/["']/g, '');
+			}
+			if (uc) {
+				return title.replace(/^(The|A|An)\s+(.*)$/i, '$2' + ', ' + '$1').toUpperCase();
+			} else {
+				return title.replace(/^(The|A|An)\s+(.*)$/i, '$2' + ', ' + '$1');
+			}
 		},
-				/**
-				 * Takes a number of bytes and returns it in GB, MB, KB, or bytes (rounded to precision decimal places)
-				 *
-				 * @param {Number} orig_size The size of the file in bytes
-				 * @param {Number} [precision=1] The number of decimal places we want
-				 * @return {String} The size in human readable verbiage
-				 */
-				size_in_human: function(orig_size,precision) {
-					if (undefined === precision) {
-						precision = 1;
-					}
-					if (orig_size > 1024*1024*1024) {
-						return((orig_size/(1024*1024*1024)).toFixed(precision) + 'GB');
-					} else if (orig_size > 1024*1024) {
-						return((orig_size/(1024*1024)).toFixed(precision) + 'MB');
-					} else if (orig_size > 1024) {
-						return((orig_size/1024).toFixed(precision) + 'KB');
-					} else {
-						return(orig_size + '');
-					}
-				}
+		/**
+		 * Takes a number of bytes and returns it in GB, MB, KB, or bytes (rounded to precision decimal places)
+		 *
+		 * @param {Number} orig_size The size of the file in bytes
+		 * @param {Number} [precision=1] The number of decimal places we want
+		 * @return {String} The size in human readable verbiage
+		 */
+		size_in_human:function (orig_size, precision) {
+			if (undefined === precision) {
+				precision = 1;
+			}
+			if (orig_size > 1024 * 1024 * 1024) {
+				return((orig_size / (1024 * 1024 * 1024)).toFixed(precision) + 'GB');
+			} else if (orig_size > 1024 * 1024) {
+				return((orig_size / (1024 * 1024)).toFixed(precision) + 'MB');
+			} else if (orig_size > 1024) {
+				return((orig_size / 1024).toFixed(precision) + 'KB');
+			} else {
+				return(orig_size + '');
+			}
+		}
 	};
 
 	/**
@@ -319,7 +327,6 @@
 		 * @return {RegExp|Boolean} A usable regular expression object if regex_string is valid, false if not
 		 */
 		valid:function (regex_string) {
-			var mystring = '';
 			try {
 				var result = new RegExp(regex_string);
 			}
