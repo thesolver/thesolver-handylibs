@@ -270,6 +270,7 @@
 		 *
 		 * @param {String} title The title we want to sort better
 		 * @param {Boolean} [rem_quotes=true] Remove single and double quotes from the title for sorting?
+		 * @param {Boolean} [uc=true] Upper case the string
 		 * @return {String} The title with any required changes
 		 */
 		sort_title:function (title,rem_quotes) {
@@ -279,7 +280,7 @@
 			if (rem_quotes) {
 				title = title.replace(/["']/g,'');
 			}
-			return title.replace(/^(The|A|An)\s+(.*)$/, '$2' + ', ' + '$1');
+			return title.replace(/^(The|A|An)\s+(.*)$/i, '$2' + ', ' + '$1').toUpperCase();
 		},
 				/**
 				 * Takes a number of bytes and returns it in GB, MB, KB, or bytes (rounded to precision decimal places)
