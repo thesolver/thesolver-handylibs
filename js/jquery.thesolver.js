@@ -1,3 +1,4 @@
+/*gobal window: false, jQuery: false */
 /**
  * Handy functions that extend jQuery
  *
@@ -7,6 +8,7 @@
  *
  */
 (function ($) {
+	"use strict";
 	var methods = {
 		/**
 		 * Unused function for now...it is the default
@@ -80,17 +82,16 @@
 			return elem_classes;
 		}
 	};
+	//noinspection FunctionWithInconsistentReturnsJS
 	$.fn.thesolver = function (method) {
-
 		// Method calling logic (straight from a jquery.com example)
 		if (methods[method]) {
 			return methods[ method ].apply(this, Array.prototype.slice.call(arguments, 1));
 		} else if (typeof method === 'object' || !method) {
 			return methods.init.apply(this, arguments);
 		} else {
-			$.error('Method ' + method + ' does not exist on jQuery.tooltip');
+			$.error('Method ' + method + ' does not exist on jQuery.thesolver');
 		}
-
 	};
 
 })(jQuery);
