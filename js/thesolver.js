@@ -27,7 +27,7 @@
 		 * @return {String} The html encoded string
 		 */
 		encode   :function (victim) {
-			return($('<div />').text(victim).html());
+			return($('<div />').text(victim).html().replace(/"/g,'&quot;'));
 		},
 		/**
 		 * Creates <a> elements with encoded text
